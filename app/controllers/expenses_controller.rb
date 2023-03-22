@@ -31,15 +31,12 @@ class ExpensesController < ApplicationController
     end
 
     if @expense.save
-      p "EXPENSE SAVED"
       @divided_cost = (@expense.amount - @expense.share)/@debtors.length
       @debtors.each do |debtor|
         debtor.debts.create(amount: @divided_cost, expense: @expense, reconciled: false)
-      end
-            
+      end     
       redirect_to group_user_path(@group, current_user)
     else
-      p "EXPENSE NOT SAVED"
       render 'new'
     end
 
@@ -65,7 +62,7 @@ class ExpensesController < ApplicationController
   end
 
   def chart
-  @expenses_chart_data = Expense.where(date: start_date..end_date)
+    @expenses_chart_data = current_user.expenses.where(date: start_date..end_date)
                                   .group(:date)
                                   .sum(:amount)
   end

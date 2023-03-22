@@ -7,12 +7,14 @@ Rails.application.routes.draw do
       resources :debts, except: [:new, :edit]
     end
 
-    resources :expenses, except: [:index]
+    resources :expenses, except: [:index] do 
+      collection do
+        get 'chart'
+      end
+    end
   end
 
   get '/users/:id/groups', to: 'users#groups', as: 'user_groups'
-
-  delete '/groups/:group_id/users/:id/debts/delete', to: 'debts#settle', as: 'group_user_debts_delete'
 
   resources :invites
 

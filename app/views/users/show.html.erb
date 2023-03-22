@@ -24,45 +24,30 @@
         <%= @user == current_user ? "Your Expenses" : "#{@user.name}'s Expenses" %> <%= link_to 'View Chart', chart_group_expenses_path(start_date: 1.month.ago.to_date, end_date: Date.today), class: "badge rounded-pill bg-danger" %>
       </h3>
 
-      <table class="table table-bordered table-striped display nowrap " id="ExpensesTable" style="width:100%"  data-page-length='50'>      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Purchased By</th>
-          <th>Category</th>
-          <th>Total Cost</th>
-          <th>Share</th>
-          <th>Date</th>
-          <th>Notes</th>
-        </tr>
+      <table class="table table-bordered table-striped display nowrap" id="ExpensesTable" style="width:100%"  data-page-length='50'>      
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Purchased By</th>
+            <th>Category</th>
+            <th>Total Cost</th>
+            <th>Share</th>
+            <th>Date</th>
+            <th>Notes</th>
+          </tr>
         </thead>
         <tbody>
-        <% @user.expenses.select{|expense| expense.group == @group}.each do |expense| %>
-          <tr>
-            <td>
-              <%= link_to expense.name, group_expense_path(@group, expense), class: '' %>
-            </td>
-            <td>
-              <%= link_to expense.user.name, group_user_path(@group, expense.user), class: '' %>
-            </td>
-            <td>
-              <%= expense.category&.item %>
-            </td>
-            <td class = "total_expense">
-              <%= expense.currency %> <%= expense.amount %>
-            </td>
-            <td class = "share_expense">
-              <%= expense.currency %>
-              <%= expense.share %>
-            </td>
-            <td>
-              <%= expense.date %>
-
-            </td>
-            <td>
-              <%= expense.notes %>
-            </td>
-          </tr>
-        <% end %>
+          <% @user.expenses.select{|expense| expense.group == @group}.each do |expense| %>
+            <tr>
+              <td><%= link_to expense.name, group_expense_path(@group, expense), class: '' %></td>
+              <td> <%= link_to expense.user.name, group_user_path(@group, expense.user), class: '' %></td>
+              <td><%= expense.category&.item %></td>
+              <td class = "total_expense"><%= expense&.currency&.name %> <%= expense.amount %></td>
+              <td class = "share_expense"><%= expense&.currency&.name %> <%= expense.share %></td>
+              <td><%= expense.date %></td>
+              <td><%= expense.notes %></td>
+            </tr>
+          <% end %>
         </tbody>
       </table>
     </div>
@@ -79,23 +64,23 @@
         </tr>
         </thead>
         <tbody>
-        <% @debts.each do |debt| %>
-          <tr>
-            <td class="red">
-              <%= "$#{'%.02f' % debt.amount}" %>
-            </td>
-            <td>
-              <%= link_to debt.expense.user.name, group_user_path(@group, debt.expense.user), class: '' %>
-            </td>
-            <td>
-              <%= link_to debt.expense.name, group_expense_path(@group, debt.expense), class: '' %>
-            </td>
-            <td><%= debt.expense.date %></td>
-            <td>
-              <%= debt.expense.notes %>
-            </td>
-          </tr>
-        <% end %>
+          <% @debts.each do |debt| %>
+            <tr>
+              <td class="red">
+                <%= "$#{'%.02f' % debt.amount}" %>
+              </td>
+              <td>
+                <%= link_to debt.expense.user.name, group_user_path(@group, debt.expense.user), class: '' %>
+              </td>
+              <td>
+                <%= link_to debt.expense.name, group_expense_path(@group, debt.expense), class: '' %>
+              </td>
+              <td><%= debt.expense.date %></td>
+              <td>
+                <%= debt.expense.notes %>
+              </td>
+            </tr>
+          <% end %>
         </tbody>
       </table>
     </div>

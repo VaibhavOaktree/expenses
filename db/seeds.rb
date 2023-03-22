@@ -9,30 +9,40 @@
 User.destroy_all
 Debt.destroy_all
 Expense.destroy_all
+Category.destroy_all
+Currency.destroy_all
 Group.destroy_all
 
-house = Group.create!(name: "5227 Nebraska Ave")
-team = Group.create!(name: "Softball Team")
+%w(bills food car).each do |cat|
+	Category.create!(item: cat)
+end
 
-tim = house.users.create!(name: "Tim", email: "tim@tim.tim", password: "timtim")
-jack = house.users.create!(name: "Jack", email: "jack@jack.jack", password: "jackjack")
-matt = house.users.create!(name: "Matt", email: "matt@matt.matt", password: "mattmatt")
+%w(INR USD EUR).each do |cat|
+	Currency.create!(name: cat)
+end
 
-dara = team.users.create!(name: "Dara", email: "dara@dara.dara", password: "daradara")
-tim.memberships.create!(group: team)
+house = Group.create!(name: "Goa Trip")
+team = Group.create!(name: "Mandu Trip")
 
-tim.expenses.create!(name: "Paper Towels", notes: "Bounty!", date: Date.yesterday, amount: 30, share: 10, group: house)
-jack.expenses.create!(name: "Rent", date: Date.yesterday, amount: 3000, share: 1000, group: house)
-matt.expenses.create!(name: "Netflix", date: Date.yesterday, amount: 9, share: 3, group: house)
+vaibhav = house.users.create!(name: "Vaibhav", email: "vaibhav@yopmail.com", password: "12345678")
+rahul = house.users.create!(name: "Rahul", email: "rahul@yopmail.com", password: "12345678")
+ram = house.users.create!(name: "Ram", email: "ram@yopmail.com", password: "12345678")
 
-dara.expenses.create!(name: "Registration Fees", date: Date.today, amount: 150, share:75, group: team)
+sita = team.users.create!(name: "Sita", email: "site@yopmail.com", password: "12345678")
+vaibhav.memberships.create!(group: team)
 
-tim.debts.create!(amount: 75, reconciled: false, expense: dara.expenses.first)
-tim.debts.create!(amount: 1000, reconciled: false, expense_id: jack.expenses.first.id)
-tim.debts.create!(amount: 3, reconciled: false, expense_id: matt.expenses.first.id)
+vaibhav.expenses.create!(name: "Travel", notes: "testing", date: Date.yesterday, amount: 30, share: 10, group: house)
+rahul.expenses.create!(name: "Rent", date: Date.yesterday, amount: 3000, share: 1000, group: house)
+ram.expenses.create!(name: "Netflix", date: Date.yesterday, amount: 9, share: 3, group: house)
 
-jack.debts.create!(amount: 10, reconciled: false, expense_id: tim.expenses.first.id)
-jack.debts.create!(amount: 3, reconciled: false, expense_id: matt.expenses.first.id)
+sita.expenses.create!(name: "Registration Fees", date: Date.today, amount: 150, share:75, group: team)
 
-matt.debts.create!(amount: 1000, reconciled: false, expense_id: jack.expenses.first.id)
-matt.debts.create!(amount: 10, reconciled: false, expense_id: tim.expenses.first.id)
+vaibhav.debts.create!(amount: 75, reconciled: false, expense: sita.expenses.first)
+vaibhav.debts.create!(amount: 1000, reconciled: false, expense_id: rahul.expenses.first.id)
+vaibhav.debts.create!(amount: 3, reconciled: false, expense_id: ram.expenses.first.id)
+
+rahul.debts.create!(amount: 10, reconciled: false, expense_id: vaibhav.expenses.first.id)
+rahul.debts.create!(amount: 3, reconciled: false, expense_id: ram.expenses.first.id)
+
+ram.debts.create!(amount: 1000, reconciled: false, expense_id: rahul.expenses.first.id)
+ram.debts.create!(amount: 10, reconciled: false, expense_id: ram.expenses.first.id)

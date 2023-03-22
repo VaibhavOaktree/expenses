@@ -10,10 +10,6 @@ class DebtsController < ApplicationController
     end
   end
 
-  def settle
-
-  end
-
   def destroy
     @group = Group.find(params[:group_id])
     @user = User.find(params[:user_id])
